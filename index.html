@@ -10,10 +10,36 @@
             font-family: Arial, sans-serif;
         }
 
-        .container {
+        /* container와 team-container의 레이아웃을 조정 */
+        .container,
+        .team-container {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
+        }
+
+        .team-container {
+            margin-top: 20px;
+            justify-content: space-between;
+            margin-left: 50px;
+            /* 도움말 위젯의 폭을 고려하여 좌우 여백 설정 */
+        }
+
+        .main-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-top: 20px;
+            margin-left: 50px;
+        }
+
+        .help-widget {
+            width: 180px;
+            margin-right: 20px;
+        }
+
+        .team-container {
+            width: calc(100% - 200px);
+            /* help-widget의 크기를 제외한 나머지 공간 */
         }
 
         .lane {
@@ -127,6 +153,120 @@
         .dropzone.dragging {
             background-color: #e0e0e0;
         }
+
+        .card.master {
+            background-color: #6f42c1;
+        }
+
+        /* 마스터 */
+        .card.diamond {
+            background-color: #007bff;
+        }
+
+        /* 다이아 */
+        .card.emerald {
+            background-color: #28a745;
+        }
+
+        /* 에메랄드 */
+        .card.platinum {
+            background-color: #17a2b8;
+        }
+
+        /* 플레티넘 */
+        .card.gold {
+            background-color: #ffc107;
+        }
+
+        /* 골드 */
+        .card.silver {
+            background-color: #6c757d;
+        }
+
+        /* 실버 */
+        .card.bronze {
+            background-color: #8b4513;
+        }
+
+        /* 브론즈 */
+        .card.iron {
+            background-color: #343a40;
+        }
+
+        /* 아이언 */
+
+        /* 도움말 박스 스타일 */
+        .help-widget {
+            margin-top: 50px;
+            width: 180px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            margin-right: 20px;
+            text-align: left;
+            font-size: 0.9em;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .help-widget h3 {
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            text-align: center;
+        }
+
+        .tier-guide {
+            margin-bottom: 5px;
+            padding: 5px;
+            border-radius: 4px;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* 티어별 색상 */
+        .tier-guide.master {
+            background-color: #6f42c1;
+        }
+
+        /* 마스터 */
+        .tier-guide.diamond {
+            background-color: #007bff;
+        }
+
+        /* 다이아 */
+        .tier-guide.emerald {
+            background-color: #28a745;
+        }
+
+        /* 에메랄드 */
+        .tier-guide.platinum {
+            background-color: #17a2b8;
+        }
+
+        /* 플레티넘 */
+        .tier-guide.gold {
+            background-color: #ffc107;
+        }
+
+        /* 골드 */
+        .tier-guide.silver {
+            background-color: #6c757d;
+        }
+
+        /* 실버 */
+        .tier-guide.bronze {
+            background-color: #8b4513;
+        }
+
+        /* 브론즈 */
+        .tier-guide.iron {
+            background-color: #343a40;
+        }
+
+        /* 아이언 */
+
+
     </style>
 </head>
 
@@ -137,74 +277,90 @@
     <div class="form-container">
         <input type="text" id="nickname" placeholder="닉네임">
         <select id="position">
-            <option value="Top">탑</option>
-            <option value="Jungle">정글</option>
-            <option value="Mid">미드</option>
-            <option value="ADC">원딜</option>
-            <option value="Support">서폿</option>
+            <option value="탑">탑</option>
+            <option value="정글">정글</option>
+            <option value="미드">미드</option>
+            <option value="원딜">원딜</option>
+            <option value="서폿">서폿</option>
         </select>
         <select id="tier">
-            <option value="Master">마스터</option>
-            <option value="Diamond">다이아</option>
-            <option value="Emerald">에메랄드</option>
-            <option value="Platinum">플레티넘</option>
-            <option value="Gold">골드</option>
-            <option value="Silver">실버</option>
-            <option value="Bronze">브론즈</option>
-            <option value="Iron">아이언</option>
+            <option value="마스터">마스터</option>
+            <option value="다이아">다이아</option>
+            <option value="에메랄드">에메랄드</option>
+            <option value="플레티넘">플레티넘</option>
+            <option value="골드">골드</option>
+            <option value="실버">실버</option>
+            <option value="브론즈">브론즈</option>
+            <option value="아이언">아이언</option>
         </select>
         <button class="add-card-btn" onclick="addCard()">카드 추가</button>
     </div>
 
     <div class="container">
-        <div class="lane dropzone" id="Top" ondrop="drop(event)" ondragover="allowDrop(event)">
+        <div class="lane dropzone" id="탑" ondrop="drop(event)" ondragover="allowDrop(event)">
             <h3>탑</h3>
         </div>
-        <div class="lane dropzone" id="Jungle" ondrop="drop(event)" ondragover="allowDrop(event)">
+        <div class="lane dropzone" id="정글" ondrop="drop(event)" ondragover="allowDrop(event)">
             <h3>정글</h3>
         </div>
-        <div class="lane dropzone" id="Mid" ondrop="drop(event)" ondragover="allowDrop(event)">
+        <div class="lane dropzone" id="미드" ondrop="drop(event)" ondragover="allowDrop(event)">
             <h3>미드</h3>
         </div>
-        <div class="lane dropzone" id="ADC" ondrop="drop(event)" ondragover="allowDrop(event)">
+        <div class="lane dropzone" id="원딜" ondrop="drop(event)" ondragover="allowDrop(event)">
             <h3>원딜</h3>
         </div>
-        <div class="lane dropzone" id="Support" ondrop="drop(event)" ondragover="allowDrop(event)">
+        <div class="lane dropzone" id="서폿" ondrop="drop(event)" ondragover="allowDrop(event)">
             <h3>서폿</h3>
         </div>
     </div>
 
-    <!-- 드래그 앤 드롭 팀 매칭 섹션 -->
-    <div class="team-container">
-        <div class="team">
-            <h3>블루팀</h3>
-            <div class="dropzone" id="blueTop" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-            <div class="dropzone" id="blueJungle" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-            <div class="dropzone" id="blueMid" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-            <div class="dropzone" id="blueADC" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-            <div class="dropzone" id="blueSupport" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-        </div>
 
-        <div class="team">
-            <h3>레드팀</h3>
-            <div class="dropzone" id="redTop" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-            <div class="dropzone" id="redJungle" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-            <div class="dropzone" id="redMid" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-            <div class="dropzone" id="redADC" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-            <div class="dropzone" id="redSupport" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+
+    <!-- 드래그 앤 드롭 팀 매칭 섹션 -->
+    <div class="main-container">
+        <div class="help-widget">
+            <h3>티어 색상 안내</h3>
+            <div class="tier-guide master">마스터</div>
+            <div class="tier-guide diamond">다이아</div>
+            <div class="tier-guide emerald">에메랄드</div>
+            <div class="tier-guide platinum">플레티넘</div>
+            <div class="tier-guide gold">골드</div>
+            <div class="tier-guide silver">실버</div>
+            <div class="tier-guide bronze">브론즈</div>
+            <div class="tier-guide iron">아이언</div>
+        </div>
+        <div class="team-container">
+            <div class="team">
+                <h3>블루팀</h3>
+                <div class="dropzone" id="blue탑" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="dropzone" id="blue정글" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="dropzone" id="blue미드" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="dropzone" id="blue원딜" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="dropzone" id="blue서폿" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            </div>
+
+            <div class="team">
+                <h3>레드팀</h3>
+                <div class="dropzone" id="red탑" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="dropzone" id="red정글" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="dropzone" id="red미드" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="dropzone" id="red원딜" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="dropzone" id="red서폿" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            </div>
         </div>
     </div>
 
+
     <script>
         const tierOrder = {
-            'Iron': 7,
-            'Bronze': 6,
-            'Silver': 5,
-            'Gold': 4,
-            'Platinum': 3,
-            'Emerald': 2,
-            'Diamond': 1,
-            'Master': 0
+            '아이언': 7,
+            '브론즈': 6,
+            '실버': 5,
+            '골드': 4,
+            '플레티넘': 3,
+            '에메랄드': 2,
+            '다이아': 1,
+            '마스터': 0
         };
 
         let currentDrag = null;
@@ -215,15 +371,15 @@
             const tier = document.getElementById('tier').value;
 
             const card = document.createElement('div');
-            card.classList.add('card');
+            card.classList.add('card', getTierClass(tier)); // 티어에 맞는 색상 클래스 추가
             card.setAttribute('draggable', 'true');
             card.setAttribute('data-tier', tierOrder[tier]); // 티어 순서 지정
             card.innerHTML = `<div class="left-section">${nickname}</div>
-                              <div class="right-section">
-                                  <p><strong>포지션:</strong> ${position}</p>
-                                  <p><strong>티어:</strong> ${tier}</p>
-                              </div>
-                              <button class="delete-btn" onclick="deleteCard(this)">삭제</button>`;
+                      <div class="right-section">
+                          <p><strong>포지션:</strong> ${position}</p>
+                          <p><strong>티어:</strong> ${tier}</p>
+                      </div>
+                      <button class="delete-btn" onclick="deleteCard(this)">삭제</button>`;
             card.ondragstart = dragStart;
             card.ondragend = dragEnd;
 
@@ -233,8 +389,22 @@
 
             // 입력 필드 초기화
             document.getElementById('nickname').value = '';
-
         }
+
+        function getTierClass(tier) {
+            switch (tier) {
+                case '마스터': return 'master';
+                case '다이아': return 'diamond';
+                case '에메랄드': return 'emerald';
+                case '플레티넘': return 'platinum';
+                case '골드': return 'gold';
+                case '실버': return 'silver';
+                case '브론즈': return 'bronze';
+                case '아이언': return 'iron';
+                default: return '';
+            }
+        }
+
 
         function insertCardSorted(lane, card) {
             const cards = lane.querySelectorAll('.card');
