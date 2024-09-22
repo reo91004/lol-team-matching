@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>롤 내전 팀원 매칭 - 드래그 앤 드롭</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .lane {
+            width: 18%;
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+            min-height: 150px;
+        }
+
+        .lane h3 {
+            margin-bottom: 10px;
+        }
+
+        .card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 2px solid #007bff;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f0f8ff;
+            cursor: move;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card .left-section {
+            flex: 1;
+            font-size: 1.4em;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .card .right-section {
+            flex: 1;
+            text-align: right;
+            font-size: 1em;
+            padding-right: 20px;
+            /* 포지션과 티어에 여유 공간 추가 */
+        }
+
+        .right-section p {
+            margin: 3px 0;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: -30px;
+            /* 삭제 버튼을 오른쪽 외부로 배치 */
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px 8px;
+            cursor: pointer;
+            font-size: 12px;
+            border-radius: 3px;
+        }
+
+        .form-container {
+            margin-bottom: 20px;
+        }
+
+        .form-container input,
+        .form-container select {
+            margin-right: 10px;
+        }
+
+        .add-card-btn {
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .team-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .team {
+            width: 40%;
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .dropzone {
+            min-height: 120px;
+            border: 2px dashed #aaa;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: stretch;
+            box-sizing: border-box;
+        }
+
+        .dropzone.dragging {
+            background-color: #e0e0e0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>롤 내전 팀원 매칭</h1>
+
+    <div class="form-container">
+        <input type="text" id="nickname" placeholder="닉네임">
+        <select id="position">
+            <option value="Top">탑</option>
+            <option value="Jungle">정글</option>
+            <option value="Mid">미드</option>
+            <option value="ADC">원딜</option>
+            <option value="Support">서폿</option>
+        </select>
+        <select id="tier">
+            <option value="Master">마스터</option>
+            <option value="Diamond">다이아</option>
+            <option value="Emerald">에메랄드</option>
+            <option value="Platinum">플레티넘</option>
+            <option value="Gold">골드</option>
+            <option value="Silver">실버</option>
+            <option value="Bronze">브론즈</option>
+            <option value="Iron">아이언</option>
+        </select>
+        <button class="add-card-btn" onclick="addCard()">카드 추가</button>
+    </div>
+
+    <div class="container">
+        <div class="lane dropzone" id="Top" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <h3>탑</h3>
+        </div>
+        <div class="lane dropzone" id="Jungle" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <h3>정글</h3>
+        </div>
+        <div class="lane dropzone" id="Mid" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <h3>미드</h3>
+        </div>
+        <div class="lane dropzone" id="ADC" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <h3>원딜</h3>
+        </div>
+        <div class="lane dropzone" id="Support" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <h3>서폿</h3>
+        </div>
+    </div>
+
+    <!-- 드래그 앤 드롭 팀 매칭 섹션 -->
+    <div class="team-container">
+        <div class="team">
+            <h3>블루팀</h3>
+            <div class="dropzone" id="blueTop" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            <div class="dropzone" id="blueJungle" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            <div class="dropzone" id="blueMid" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            <div class="dropzone" id="blueADC" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            <div class="dropzone" id="blueSupport" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        </div>
+
+        <div class="team">
+            <h3>레드팀</h3>
+            <div class="dropzone" id="redTop" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            <div class="dropzone" id="redJungle" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            <div class="dropzone" id="redMid" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            <div class="dropzone" id="redADC" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            <div class="dropzone" id="redSupport" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        </div>
+    </div>
+
+    <script>
+        const tierOrder = {
+            'Iron': 7,
+            'Bronze': 6,
+            'Silver': 5,
+            'Gold': 4,
+            'Platinum': 3,
+            'Emerald': 2,
+            'Diamond': 1,
+            'Master': 0
+        };
+
+        let currentDrag = null;
+
+        function addCard() {
+            const nickname = document.getElementById('nickname').value;
+            const position = document.getElementById('position').value;
+            const tier = document.getElementById('tier').value;
+
+            const card = document.createElement('div');
+            card.classList.add('card');
+            card.setAttribute('draggable', 'true');
+            card.setAttribute('data-tier', tierOrder[tier]); // 티어 순서 지정
+            card.innerHTML = `<div class="left-section">${nickname}</div>
+                              <div class="right-section">
+                                  <p><strong>포지션:</strong> ${position}</p>
+                                  <p><strong>티어:</strong> ${tier}</p>
+                              </div>
+                              <button class="delete-btn" onclick="deleteCard(this)">삭제</button>`;
+            card.ondragstart = dragStart;
+            card.ondragend = dragEnd;
+
+            // 해당 라인에 카드 추가
+            const lane = document.getElementById(position);
+            insertCardSorted(lane, card);
+
+            // 입력 필드 초기화
+            document.getElementById('nickname').value = '';
+
+        }
+
+        function insertCardSorted(lane, card) {
+            const cards = lane.querySelectorAll('.card');
+            let inserted = false;
+
+            for (let i = 0; i < cards.length; i++) {
+                const currentCard = cards[i];
+                const currentTier = parseInt(currentCard.getAttribute('data-tier'));
+                const newCardTier = parseInt(card.getAttribute('data-tier'));
+
+                if (newCardTier < currentTier) {
+                    lane.insertBefore(card, currentCard);
+                    inserted = true;
+                    break;
+                }
+            }
+
+            if (!inserted) {
+                lane.appendChild(card); // 맨 마지막에 추가
+            }
+        }
+
+        function deleteCard(button) {
+            const card = button.parentElement;
+            card.remove();
+        }
+
+        // 드래그 앤 드롭 함수
+        function dragStart(event) {
+            currentDrag = event.target;
+            setTimeout(() => event.target.classList.add('dragging'), 0);
+        }
+
+        function dragEnd(event) {
+            event.target.classList.remove('dragging');
+            currentDrag = null;
+        }
+
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            const target = event.target;
+
+            // dropzone 위에서만 드롭되도록 제한
+            if (target.classList.contains('dropzone')) {
+                target.appendChild(currentDrag);
+            }
+        }
+    </script>
+
+
+</body>
+
+</html>
