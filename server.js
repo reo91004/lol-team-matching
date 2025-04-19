@@ -7,6 +7,14 @@ require("dotenv").config(); // dotenv 로드
 const app = express();
 const port = 3000;
 
+// CORS 설정 옵션
+const corsOptions = {
+	origin: "http://blog.reo91004.com/lol-team-matching/", // GitHub Pages 주소만 허용
+	optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions)); // 특정 출처만 허용하도록 수정
+app.use(express.json());
+
 // --- Riot API 설정 ---
 // 환경 변수에서 API 키 로드
 const RIOT_API_KEY = process.env.RIOT_API_KEY;
@@ -29,10 +37,6 @@ const DB_NAME = "lol_team_matcher";
 const COLLECTION_NAME = "players";
 let dbClient = null;
 let playersCollection = null;
-
-// CORS 설정 (모든 출처 허용)
-app.use(cors());
-app.use(express.json());
 
 // --- 서버 시작 시 Data Dragon 정보 가져오기 ---
 async function connectToMongoDB() {
