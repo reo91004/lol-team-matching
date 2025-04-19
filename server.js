@@ -9,10 +9,10 @@ const port = 3000;
 
 // CORS 설정 옵션
 const corsOptions = {
-	origin: "http://blog.reo91004.com/lol-team-matching/", // GitHub Pages 주소만 허용
+	origin: "https://blog.reo91004.com", // 프론트엔드 주소 (HTTPS 사용 가정)
 	optionsSuccessStatus: 200,
 };
-app.use(cors(corsOptions)); // 특정 출처만 허용하도록 수정
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // --- Riot API 설정 ---

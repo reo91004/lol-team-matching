@@ -1178,13 +1178,13 @@
         let ddragonVersion = null;
         let championDataMap = null;
         // 백엔드 서버 주소: 우분투 노트북의 공인 IP 또는 DDNS 주소로 변경해야 한다.
-        const backendUrl = 'http://192.168.0.5:3000'; // 예: 'http://123.45.67.89:3000'
+        const backendUrl = 'http://sammaru.iptime.org:3000'; // DDNS 주소 사용
 
         // --- 페이지 로드 시 실행될 초기화 함수 ---
         async function initializeApp() {
             try {
                 console.log("Fetching champion data from backend...");
-                const response = await fetch('http://localhost:3000/api/ddragon/champions');
+                const response = await fetch(`${backendUrl}/api/ddragon/champions`); // backendUrl 사용
                 if (!response.ok) {
                     throw new Error(`Failed to fetch champion data: ${response.statusText}`);
                 }
