@@ -1,80 +1,85 @@
-# 롤 내전 밸런스 매칭 시스템 백엔드
+## 기능
 
-이 프로젝트는 롤 내전 밸런스 매칭 시스템의 Riot API 호출을 처리하는 백엔드 서버입니다.
+- 소환사 닉네임과 태그로 플레이어 정보 조회
+- 티어, 랭크, 승률, 주 포지션, 주 챔피언 정보 표시
+- 10명의 플레이어 정보 기반 밸런스 팀 생성
+- 모던한 UI/UX 제공
 
-## 설치
+## 기술 스택
 
-1.  Node.js (버전 18 이상 권장)를 설치합니다.
-2.  프로젝트 루트 디렉토리에서 다음 명령어를 실행하여 필요한 패키지를 설치합니다:
-    ```bash
-    npm install
-    ```
+- **프레임워크**: Next.js 15.2.4
+- **언어**: TypeScript
+- **스타일링**: Tailwind CSS
+- **UI 컴포넌트**: Radix UI
+- **상태 관리**: React Hooks
+- **폼 관리**: React Hook Form + Zod
+- **API**: Riot Games API
 
-## 실행
+## 설치 및 실행
 
-다음 명령어를 사용하여 서버를 시작합니다:
+### 1. 의존성 설치
 
-1.  **환경 변수 설정:**
-    프로젝트 루트 디렉토리에 `.env` 파일을 생성하고 다음 내용을 추가합니다. `YOUR_RIOT_API_KEY` 부분을 실제 Riot API 키로 교체해야 합니다. 이 키는 개발용 키를 사용하며, 만료될 수 있습니다. ([Riot Developer Portal](https://developer.riotgames.com/)에서 발급)
+```bash
+npm install
+```
 
-    ```dotenv
-    RIOT_API_KEY=YOUR_RIOT_API_KEY
-    ```
+### 2. 환경 변수 설정
 
-2.  **서버 시작:**
-    ```bash
-    npm start
-    ```
+프로젝트 루트에 `.env.local` 파일을 생성하고 다음 내용을 추가한다:
 
-서버는 기본적으로 `http://localhost:3000` 에서 실행됩니다.
+```env
+RIOT_API_KEY=YOUR_RIOT_API_KEY
+```
+
+Riot API 키는 [Riot Developer Portal](https://developer.riotgames.com/)에서 발급받을 수 있다.
+
+### 3. 개발 서버 실행
+
+```bash
+npm run dev
+```
+
+개발 서버는 `http://localhost:3000`에서 실행된다.
+
+### 4. 프로덕션 빌드
+
+```bash
+npm run build
+npm start
+```
+
+## 사용 방법
+
+1. 웹 페이지 접속 후 10명의 소환사 닉네임과 태그를 입력한다
+2. 각 플레이어의 "조회" 버튼을 클릭하여 정보를 가져온다
+3. 모든 플레이어 정보가 조회되면 "팀 밸런싱 시작" 버튼이 활성화된다
+4. 버튼을 클릭하면 균형 잡힌 두 팀으로 나누어 결과를 표시한다
 
 ## API 엔드포인트
 
-- `GET /api/summoner/:summonerName`: 지정된 소환사명을 사용하여 Riot API에서 소환사 정보 및 랭크 정보를 조회합니다.
-- `GET /api/ddragon/champions`: 최신 Data Dragon 버전 및 가공된 챔피언 데이터를 반환합니다. (서버 시작 시 캐싱)
-- `GET /api/riotid/:gameName/:tagLine`: Riot ID(게임 이름 + 태그라인)를 사용하여 Riot API에서 소환사 정보, 랭크 정보, 상위 챔피언 숙련도 ID를 조회합니다.
+- `GET /api/player?gameName={닉네임}&tagLine={태그}`: 플레이어 정보 조회
 
-## 데이터베이스 설정 (MongoDB on Ubuntu)
+## 프로젝트 구조
 
-이 애플리케이션은 등록된 플레이어 정보를 저장하기 위해 MongoDB를 사용합니다.
+```
+├── app/
+│   ├── api/
+│   │   └── player/
+│   │       └── route.ts          # 플레이어 정보 API
+│   │   ├── page.tsx                  # 메인 페이지
+│   │   ├── layout.tsx                # 레이아웃
+│   │   └── globals.css               # 글로벌 스타일
+│   ├── components/
+│   │   └── ui/                       # UI 컴포넌트
+│   ├── lib/
+│   │   └── riot-api.ts               # Riot API 클라이언트
+│   ├── hooks/                        # 커스텀 훅
+│   └── styles/                       # 스타일 파일
+└── public/                       # 정적 파일
+```
 
-1.  **MongoDB 설치:**
-    Ubuntu 터미널에서 다음 명령어를 실행하여 MongoDB를 설치합니다.
+## 주의사항
 
-    ```bash
-    sudo apt update
-    sudo apt install -y mongodb
-    ```
-
-2.  **MongoDB 서비스 확인/시작:**
-    설치가 완료되면 MongoDB 서비스(`mongod`)가 자동으로 시작되는 경우가 많습니다. 상태를 확인하려면 다음 명령어를 사용합니다.
-
-    ```bash
-    sudo systemctl status mongod
-    ```
-
-    만약 실행 중이 아니라면 다음 명령어로 시작합니다.
-
-    ```bash
-    sudo systemctl start mongod
-    ```
-
-    부팅 시 자동으로 시작되도록 설정하려면 다음 명령어를 사용합니다.
-
-    ```bash
-    sudo systemctl enable mongod
-    ```
-
-    (참고: 일부 시스템에서는 서비스 이름이 `mongodb`일 수도 있습니다. `status` 명령어로 확인하세요.)
-
-3.  **데이터베이스 연결 확인 (선택 사항):**
-    `mongosh` (MongoDB Shell)을 사용하여 데이터베이스에 직접 연결하여 확인할 수 있습니다.
-
-    ```bash
-    mongosh
-    ```
-
-    쉘에 접속되면 `show dbs` 명령어로 데이터베이스 목록을 볼 수 있습니다. `Ctrl+D` 또는 `exit`로 쉘을 종료합니다.
-
-4.  **백엔드 연결 설정:**
-    백엔드 서버(`server.js`)는 기본적으로 로컬 MongoDB 인스턴스(`mongodb://localhost:27017`)의 `lol_team_matcher` 데이터베이스에 연결을 시도합니다. 별도의 설정은 필요하지 않지만, 다른 호스트나 포트, 데이터베이스 이름을 사용하려면 `server.js` 파일 내의 `MONGODB_URI`와 `DB_NAME` 상수를 수정해야 합니다.
+- Riot API 키는 개발용 키를 사용하며, 24시간마다 만료된다
+- API 호출 제한이 있으므로 과도한 요청은 피해야 한다
+- 소환사 정보 조회 시 정확한 닉네임과 태그를 입력해야 한다
